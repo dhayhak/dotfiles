@@ -15,6 +15,7 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'kien/ctrlp.vim'
 Plug 'benekastah/neomake'
 Plug 'millermedeiros/vim-esformatter'
+Plug 'ddollar/nerdcommenter'
 call plug#end()
 
 set background=dark
@@ -112,4 +113,8 @@ nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 
 let NERDTreeIgnore = ['node_modules']
-map <leader>w :BufOnly
+map <leader>w :BufOnly<CR>
+
+" Comment/Uncomment
+noremap <leader>/ :call NERDComment(0,"toggle")<CR>
+
