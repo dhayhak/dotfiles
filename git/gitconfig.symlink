@@ -1,0 +1,88 @@
+#gitconfig
+[user]
+    email = andrew@smooch.io
+    name = "Andrew Lavers"
+[github]
+    user = alavers
+[core]
+    autocrlf = false
+    excludesfile = /Users/andrew/.gitignore
+    editor = vim
+    ui = true
+    excludesfile = ~/.gitignore_global
+    whitespace = cr-at-eol
+#   pager = diff-so-fancy | less --tabs=4 -RFX
+[credential]
+[code]
+    autocrlf = false
+[alias]
+    st = status
+    hist = 'log
+    hist = log
+    hist = log --pretty=format:%h
+    co = checkout
+    ci = commit
+    br = branch
+    type = 'cat-file
+    dump = 'cat-file
+    l = log --graph --pretty=format:'%Cred%h%Creset %C(bold blue)%an%C(reset) - %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+    #l = log --oneline --graph --all --decorate
+    ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+    ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+    lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+    fl = log -u
+    f = "!f() { git ls-files | findstr "$1"; }; f"
+    grep = grep -Ii
+    s = status -s
+    
+    #dc = diff --cached
+    diff = diff --word-dif -w
+    d = diff --ignore-space-at-eol -b -w --ignore-blank-lines --color
+    dc = diff --ignore-space-at-eol -b -w --ignore-blank-lines --cached --color
+
+    # what did I do today
+    day = "!sh -c 'git log --reverse --no-merges --branches=* --date=local --after=\"yesterday 11:59PM\" --author=\"`git config --get user.name`\"'" 
+   
+    # order files by number of commits, ascending
+    # Written by Corey Haines
+    # Scriptified by Gary Bernhardt
+    # Show churn for a time range:
+    #   $ git churn --since='1 month ago'
+    churn = "!f() { git log --all -M -C --name-only --format='format:' \"$@\" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print \"count\tfile\"} {print $1 \"\t\" $2}' | sort -g; }; f"
+[diff]
+    tool = Kaleidoscope
+    compactionHeuristic = true
+[difftool]
+    prompt = false
+[merge]
+#   tool = Kaleidoscope
+    tool = vimdiff
+    conflictstyle = diff3
+#[mergetool]
+#   prompt = false
+
+[mergetool "sublimerge"]
+    cmd = subl -n --wait \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\" --command \"sublimerge_diff_views\"
+    trustExitCode = false
+
+[difftool "sublimerge"]
+    cmd = subl -n --wait \"$REMOTE\" \"$LOCAL\" --command \"sublimerge_diff_views {\\\"left_read_only\\\": true, \\\"right_read_only\\\": true}\"
+
+[heroku]
+[init]
+    templatedir = /Users/andrew/.git-templates
+[filter "lfs"]
+    clean = git-lfs clean %f
+    smudge = git-lfs smudge %f
+    required = true
+[github-pr-stats "github.com"]
+[mergetool "Kaleidoscope"]
+    cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+    trustexitcode = true
+[difftool "Kaleidoscope"]
+    cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[mergetool]
+    prompt = false
+[color "diff"]
+    meta = blue black bold
