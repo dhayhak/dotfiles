@@ -11,7 +11,7 @@
     ui = true
     excludesfile = ~/.gitignore_global
     whitespace = cr-at-eol
-#   pager = diff-so-fancy | less --tabs=4 -RFX
+   pager = diff-so-fancy | less --tabs=4 -RFX
 [credential]
 [code]
     autocrlf = false
