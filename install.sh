@@ -16,6 +16,9 @@ if [ "$(uname)" == "Darwin" ]; then
     echo "Updating OSX settings"
     source install/osx.sh
 
+    echo "Adding Karabiner config"
+    source install/karabiner.sh
+
     echo "Installing node (from nvm)"
     source install/nvm.sh
 

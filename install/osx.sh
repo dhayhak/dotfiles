@@ -1,5 +1,20 @@
 #!/usr/bin/env sh
 
+# SSD optimization http://forums.macrumors.com/threads/guide-ssd-tweaking-guide.1505922/
+
+## Disable hibernation
+sudo stuff
+sudo pmset -a hibernatemode 0
+sudo rm /Private/var/vm/sleepimage
+sudo touch /Private/var/vm/sleepimage
+sudo chflags uchg /Private/var/vm/sleepimage
+
+## Disable sudden motion sensor (no HDD only)
+# sudo pmset -a sms 0
+
+# Enable keyboard on login screen
+sudo defaults write /Library/Preferences/com.apple.screensaver loginWindowIdleTime 10800
+
 # echo "Finder: show all filename extensions"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 

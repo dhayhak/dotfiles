@@ -119,6 +119,14 @@ code () {
     fi
 }
 
+function tz {
+    TZ=Canada/Eastern date -r $1
+}
+
+function timestamp {
+    echo $(date +%s)
+}
+
 # Run grep'd tests
 function stg {
     local qw=\'
@@ -128,6 +136,14 @@ function stg {
 function stgd {
     local qw=\'
     eval LOG_LEVEL=debug grunt serverTest --grep $qw$@$qw
+}
+
+function swap()         
+{
+    local TMPFILE=tmp.$$
+    mv "$1" $TMPFILE
+    mv "$2" "$1"
+    mv $TMPFILE "$2"
 }
 
 export NVM_DIR=$HOME/.nvm
