@@ -16,11 +16,30 @@ Plug 'kien/ctrlp.vim'
 Plug 'benekastah/neomake'
 Plug 'millermedeiros/vim-esformatter'
 Plug 'ddollar/nerdcommenter'
+Plug 'mileszs/ack.vim'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
+Plug 'scrooloose/syntastic'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-surround'
+Plug 'lfilho/cosco.vim'
+Plug 'othree/yajs.vim'
+Plug 'mxw/vim-jsx'
+Plug 'yosiat/oceanic-next-vim'
 call plug#end()
+
+" neovim theme setting
+" https://github.com/mhartington/oceanic-next
+" let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+
 
 set background=dark
 syntax enable
-colorscheme molokai
+" colorscheme molokai
+" colorscheme OceanicNext
+colorscheme monokai
 
 " A minimal vimrc for new vim users to start with.
 "
@@ -37,6 +56,9 @@ colorscheme molokai
 "
 "  If you don't understand a setting in here, just type ':h setting'.
 
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
 
 " Make backspace behave in a sane manner.
 set backspace=indent,eol,start
@@ -75,6 +97,9 @@ set mouse=a
 set pastetoggle=<F2>
 " set timeoutlen=50 ttimeoutlen=0
 
+" Scroll ahead of the cursor
+set so=5
+
 " CtrlP ignore
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules
 
@@ -84,6 +109,7 @@ set clipboard=unnamed
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+" let g:airline_theme='oceanicnext'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
@@ -92,13 +118,18 @@ let g:airline#extensions#tabline#enabled = 1
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
+" Cycle through buffers
+:nnoremap <Tab> :bnext<CR>
+:nnoremap <S-Tab> :bprevious<CR>
+
 " Close buffer without fucking up nerdtree
 nnoremap <leader>q :bp<cr>:bd #<cr>
 
-nnoremap <leader d>dd
+" Close buffer window
+nnoremap <leader>w :bd<cr>
+
 nmap <leader>, :w<cr>
 
-nnoremap ; :
 nnoremap j gj
 nnoremap k gk
 
@@ -113,8 +144,42 @@ nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 
 let NERDTreeIgnore = ['node_modules']
-map <leader>w :BufOnly<CR>
 
 " Comment/Uncomment
 noremap <leader>/ :call NERDComment(0,"toggle")<CR>
 
+" Auto format
+map <leader>f :Esformatter<CR>
+
+ino jj <esc>
+
+" Enter to clear search highlight
+nnoremap <CR> :noh<CR><CR>
+
+" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_loc_list_height = 5
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+let g:syntastic_javascript_checkers = ['eslint']
+
+let g:syntastic_error_symbol = '❌'
+let g:syntastic_style_error_symbol = '⁉️'
+let g:syntastic_warning_symbol = '⚠️'
+let g:syntastic_style_warning_symbol = '💩'
+
+highlight link SyntasticErrorSign SignColumn
+highlight link SyntasticWarningSign SignColumn
+highlight link SyntasticStyleErrorSign SignColumn
+highlight link SyntasticStyleWarningSign SignColumn
+
+
+" Cosco config
+" nmap <leader>; <Plug>(cosco-commaOrSemiColon)
+autocmd FileType javascript,css nmap <silent> <Leader>; <Plug>(cosco-commaOrSemiColon)
+autocmd FileType javascript,css imap <silent> <Leader>; <c-o><Plug>(cosco-commaOrSemiColon)

@@ -61,9 +61,6 @@ export PATH="/usr/local/heroku/bin:/usr/local/Cellar/postgresql/9.3.4/bin:/user/
 export PATH=$HOME/Library/Android/sdk/platform-tools:$PATH
 # export MANPATH="/usr/local/man:$MANPATH"
 
-# Set PATH in launchctl so apps have it as well
-launchctl setenv PATH $PATH
-
 export NODE_REPL_MODE=strict
 export NODE_REPL_HISTORY_FILE=$HOME/.node_repl_history
 export XDG_CONFIG_HOME=$HOME/.config
@@ -149,4 +146,6 @@ function swap()
 export NVM_DIR=$HOME/.nvm
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
+export HISTTIMEFORMAT="%d/%m/%y %T "
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export HISTTIMEFORMAT='%F %T '

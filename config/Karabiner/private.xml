@@ -26,4 +26,20 @@
       <autogen>--KeyToKey-- KeyCode::PC_SCROLLLOCK, KeyCode::RawValue::0x006b</autogen>
       <autogen>--KeyToKey-- KeyCode::PC_PAUSE, KeyCode::RawValue::0x0071</autogen>
   </item>
+  <item>
+    <name>Send eisuu, escape when you press left control key alone.</name>
+    <identifier>private.control_eisuu_escape</identifier>
+    <autogen>
+      __KeyOverlaidModifier__
+      KeyCode::CONTROL_L,
+
+      @begin
+      KeyCode::CONTROL_L,
+      @end
+
+      @begin
+      KeyCode::JIS_EISUU, KeyCode::ESCAPE,
+      @end
+    </autogen>
+  </item>
 </root>
