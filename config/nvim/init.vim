@@ -24,10 +24,13 @@ Plug 'honza/vim-snippets'
 Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
-Plug 'lfilho/cosco.vim'
 Plug 'othree/yajs.vim'
 Plug 'mxw/vim-jsx'
 Plug 'yosiat/oceanic-next-vim'
+Plug 'geekjuice/vim-mocha'
+Plug 'vim-scripts/BufOnly.vim'
+Plug 'fatih/vim-go'
+Plug 'mustache/vim-mustache-handlebars'
 call plug#end()
 
 " neovim theme setting
@@ -151,7 +154,17 @@ noremap <leader>/ :call NERDComment(0,"toggle")<CR>
 " Auto format
 map <leader>f :Esformatter<CR>
 
-ino jj <esc>
+" remap esc
+inoremap jk <esc>
+
+" wipout buffer
+nmap <silent> <leader>b :bw<cr>
+
+" close all other buffers
+nmap <leader>W :BufOnly<CR>
+
+" shortcut to save
+nmap <leader>, :w<cr>
 
 " Enter to clear search highlight
 nnoremap <CR> :noh<CR><CR>
@@ -166,6 +179,7 @@ let g:syntastic_loc_list_height = 5
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
+let g:syntastic_go_checkers = ['go']
 let g:syntastic_javascript_checkers = ['eslint']
 
 let g:syntastic_error_symbol = '❌'
@@ -178,8 +192,23 @@ highlight link SyntasticWarningSign SignColumn
 highlight link SyntasticStyleErrorSign SignColumn
 highlight link SyntasticStyleWarningSign SignColumn
 
+" vim-mocha
+let g:mocha_js_command = "!mocha --no-colors {spec}"
+map <Leader>a :call RunAllSpecs()<CR>
+map <Leader>t :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
 
-" Cosco config
-" nmap <leader>; <Plug>(cosco-commaOrSemiColon)
-autocmd FileType javascript,css nmap <silent> <Leader>; <Plug>(cosco-commaOrSemiColon)
-autocmd FileType javascript,css imap <silent> <Leader>; <c-o><Plug>(cosco-commaOrSemiColon)
+" popup menu navigation with hjkl
+inoremap <expr> j pumvisible() ? "\<C-N>" : "j"
+inoremap <expr> k pumvisible() ? "\<C-P>" : "k"
+
+" Load local project directory settings
+silent! so .vimlocal
+
+" Project specific editor settings
+function SmoochCoreJs()
+    set wildignore+=lib,dist,amd
+    let g:NERDTreeIgnore = ['lib', 'dist', 'amd']
+endfunction
+autocmd BufRead,BufNewFile */smooch-core-js/* call SmoochCoreJs()

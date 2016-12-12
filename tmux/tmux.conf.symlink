@@ -17,7 +17,7 @@ bind-key a send-prefix
 # Rather than constraining window size to the maximum size of any client
 # connected to the *session*, constrain window size to the maximum size of any
 # client connected to *that window*. Much more reasonable.
-setw -g aggressive-resize on
+# setw -g aggressive-resize on
 
 # make delay shorter
 set -sg escape-time 0
@@ -32,10 +32,11 @@ bind = select-layout tiled
 # make window/pane index start with 1
 set -g base-index 1
 setw -g pane-base-index 1
+set-window-option -g pane-base-index 1
 
 # highlight window when it has new activity
-setw -g monitor-activity on
-set -g visual-activity on
+setw -g monitor-activity off
+set -g visual-activity off
 
 set-option -g set-titles on
 set-option -g set-titles-string "#T - #W"
@@ -43,6 +44,9 @@ set-option -g set-titles-string "#T - #W"
 # enable pbcopy and pbpaste
 # https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard/blob/master/README.md
 set-option -g default-command "reattach-to-user-namespace -l zsh"
+
+# dont rename windows
+set-option -g allow-rename off
 
 ######################
 #### Key Bindings ####
@@ -74,16 +78,25 @@ bind -r K resize-pane -U 10
 bind -r L resize-pane -R 10
 
 # quickly switch panes
-unbind ^J
-bind ^J select-pane -t :.+
+# i backward
+# o forward (default
+unbind i
+bind i select-pane -t :.-
+
+# Toggle panes
+bind l last-window
 
 # enable mouse support for switching panes/windows
 setw -g mouse on
+set -g @scroll-speed-num-lines-per-scroll 100
 # set-option -g -q mouse on
 
 # Use vim keybindings in copy mode
 # https://robots.thoughtbot.com/tmux-copy-paste-on-os-x-a-better-future
 setw -g mode-keys vi
+
+# Prevent scroll to bottom on copy
+unbind -t vi-copy MouseDragEnd1Pane
 
 # Setup 'v' to begin selection as in Vim
 # bind-key -t vi-copy v begin-selection
