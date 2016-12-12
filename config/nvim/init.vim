@@ -206,9 +206,16 @@ inoremap <expr> k pumvisible() ? "\<C-P>" : "k"
 " Load local project directory settings
 silent! so .vimlocal
 
+
 " Project specific editor settings
-function SmoochCoreJs()
-    set wildignore+=lib,dist,amd
-    let g:NERDTreeIgnore = ['lib', 'dist', 'amd']
+function ProjectSettings()
+    " smooch-core-js settings
+    let smooch_core_js = matchstr(getcwd(), 'git/smooch-core-js')
+    if !empty(smooch_core_js)
+        let g:ctrlp_custom_ignore = 'lib\|dist\|amd'
+        let g:NERDTreeIgnore = ['lib', 'dist', 'amd']
+    endif 
 endfunction
-autocmd BufRead,BufNewFile */smooch-core-js/* call SmoochCoreJs()
+
+autocmd VimEnter * call ProjectSettings()
+
