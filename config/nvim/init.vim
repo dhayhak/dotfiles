@@ -206,6 +206,8 @@ inoremap <expr> k pumvisible() ? "\<C-P>" : "k"
 " Load local project directory settings
 silent! so .vimlocal
 
+" Automatically wrap descriptions in git commits
+autocmd FileType gitcommit set tw=72
 
 " Project specific editor settings
 function ProjectSettings()
@@ -214,6 +216,7 @@ function ProjectSettings()
     if !empty(smooch_core_js)
         let g:ctrlp_custom_ignore = 'lib\|dist\|amd'
         let g:NERDTreeIgnore = ['lib', 'dist', 'amd']
+        let g:mocha_js_command = "!mocha --compilers js:babel-core/register --require ./test-setup.js {spec}"
     endif 
 endfunction
 

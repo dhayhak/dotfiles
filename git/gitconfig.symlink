@@ -53,6 +53,7 @@
 [diff]
     tool = Kaleidoscope
     compactionHeuristic = true
+	indentHeuristic = true
 [difftool]
     prompt = false
 [merge]
