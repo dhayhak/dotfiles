@@ -19,7 +19,6 @@ Plug 'ddollar/nerdcommenter'
 Plug 'mileszs/ack.vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'benekastah/neomake'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'othree/yajs.vim'
@@ -178,7 +177,6 @@ nnoremap <CR> :noh<CR><CR>
 " Neomake
 let g:neomake_javascript_enabled_makers = ['eslint']
 autocmd! BufWritePost,BufEnter * Neomake
-let g:neomake_open_list = 2
 
 " vim-mocha
 let g:mocha_js_command = "!mocha --no-colors {spec}"
