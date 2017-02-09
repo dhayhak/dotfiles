@@ -9,7 +9,7 @@ let maplocalleader = ','
 let g:mapleader = ','
 
 call plug#begin()
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'kien/ctrlp.vim'
@@ -19,9 +19,7 @@ Plug 'ddollar/nerdcommenter'
 Plug 'mileszs/ack.vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
-Plug 'scrooloose/syntastic'
+Plug 'benekastah/neomake'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'othree/yajs.vim'
@@ -31,6 +29,14 @@ Plug 'geekjuice/vim-mocha'
 Plug 'vim-scripts/BufOnly.vim'
 Plug 'fatih/vim-go'
 Plug 'mustache/vim-mustache-handlebars'
+" " https://www.gregjs.com/vim/2016/neovim-deoplete-jspc-ultisnips-and-tern-a-config-for-kickass-autocompletion/
+Plug 'ervandew/supertab'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 call plug#end()
 
 " neovim theme setting
@@ -136,10 +142,10 @@ nmap <leader>, :w<cr>
 nnoremap j gj
 nnoremap k gk
 
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+" map <C-h> <C-w>h
+" map <C-j> <C-w>j
+" map <C-k> <C-w>k
+" map <C-l> <C-w>l
 map <C-n> :NERDTreeToggle<CR>
 
 " scroll the viewport faster
@@ -169,28 +175,10 @@ nmap <leader>, :w<cr>
 " Enter to clear search highlight
 nnoremap <CR> :noh<CR><CR>
 
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_loc_list_height = 5
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
-let g:syntastic_go_checkers = ['go']
-let g:syntastic_javascript_checkers = ['eslint']
-
-let g:syntastic_error_symbol = '❌'
-let g:syntastic_style_error_symbol = '⁉️'
-let g:syntastic_warning_symbol = '⚠️'
-let g:syntastic_style_warning_symbol = '💩'
-
-highlight link SyntasticErrorSign SignColumn
-highlight link SyntasticWarningSign SignColumn
-highlight link SyntasticStyleErrorSign SignColumn
-highlight link SyntasticStyleWarningSign SignColumn
+" Neomake
+let g:neomake_javascript_enabled_makers = ['eslint']
+autocmd! BufWritePost,BufEnter * Neomake
+let g:neomake_open_list = 2
 
 " vim-mocha
 let g:mocha_js_command = "!mocha --no-colors {spec}"
@@ -200,8 +188,8 @@ map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
 
 " popup menu navigation with hjkl
-inoremap <expr> j pumvisible() ? "\<C-N>" : "j"
-inoremap <expr> k pumvisible() ? "\<C-P>" : "k"
+" inoremap <expr> j pumvisible() ? "\<C-N>" : "j"
+" inoremap <expr> k pumvisible() ? "\<C-P>" : "k"
 
 " Load local project directory settings
 silent! so .vimlocal
@@ -209,8 +197,40 @@ silent! so .vimlocal
 " Automatically wrap descriptions in git commits
 autocmd FileType gitcommit set tw=72
 
+"
+" deoplete & ultisnips
+" 
+let g:UltiSnipsSnippetsDir = '~/.vim/snippets'
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#omni#functions = {}
+let g:deoplete#omni#functions.javascript = [
+  \ 'tern#Complete',
+  \ 'jspc#omni'
+\]
+set completeopt=longest,menuone,preview
+let g:deoplete#sources = {}
+let g:deoplete#sources['javascript'] = ['file', 'ultisnips', 'ternjs']
+let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips', 'ternjs']
+let g:tern#command = ['tern']
+let g:tern#arguments = ['--persistent']
+
+
+autocmd FileType javascript let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsListSnippets="<C-l>"
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
+" auto-dismiss popup preview window
+" let g:SuperTabClosePreviewOnPopupClose = 1
+
+" disable popup preview window
+set completeopt-=preview
+"
+" /deoplete
+"
+
 " Project specific editor settings
-function ProjectSettings()
+function! ProjectSettings()
     " smooch-core-js settings
     let smooch_core_js = matchstr(getcwd(), 'git/smooch-core-js')
     if !empty(smooch_core_js)
@@ -218,6 +238,13 @@ function ProjectSettings()
         let g:NERDTreeIgnore = ['lib', 'dist', 'amd']
         let g:mocha_js_command = "!mocha --compilers js:babel-core/register --require ./test-setup.js {spec}"
     endif 
+
+    " let smooch_debuggler = matchstr(getcwd(), 'git/smooch-debuggler')
+    " if !empty(smooch_debuggler)
+    "     let g:ctrlp_custom_ignore = 'lib\|dist\|amd'
+    "     let g:NERDTreeIgnore = ['lib', 'dist', 'amd']
+    "     let g:mocha_js_command = "!mocha --compilers js:babel-core/register --require ./test-setup.js {spec}"
+    " endif 
 endfunction
 
 autocmd VimEnter * call ProjectSettings()
