@@ -9,7 +9,7 @@ let maplocalleader = ','
 let g:mapleader = ','
 
 call plug#begin()
-" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'kien/ctrlp.vim'
@@ -25,6 +25,7 @@ Plug 'othree/yajs.vim'
 Plug 'mxw/vim-jsx'
 Plug 'yosiat/oceanic-next-vim'
 Plug 'geekjuice/vim-mocha'
+Plug 'artemave/spec-index.vim'
 Plug 'vim-scripts/BufOnly.vim'
 Plug 'fatih/vim-go'
 Plug 'mustache/vim-mustache-handlebars'
@@ -184,6 +185,9 @@ map <Leader>a :call RunAllSpecs()<CR>
 map <Leader>t :call RunCurrentSpecFile()<CR>
 map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
+
+" show test spec index
+nnoremap <Leader>si :ShowSpecIndex<cr>
 
 " popup menu navigation with hjkl
 " inoremap <expr> j pumvisible() ? "\<C-N>" : "j"
