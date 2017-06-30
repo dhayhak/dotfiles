@@ -94,6 +94,8 @@ set -g @scroll-speed-num-lines-per-scroll 100
 # Use vim keybindings in copy mode
 # https://robots.thoughtbot.com/tmux-copy-paste-on-os-x-a-better-future
 setw -g mode-keys vi
+bind-key -t vi-copy 'v' begin-selection
+bind-key -t vi-copy 'y' copy-selection
 
 # Prevent scroll to bottom on copy
 unbind -t vi-copy MouseDragEnd1Pane

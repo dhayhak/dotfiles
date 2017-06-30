@@ -25,12 +25,12 @@ if [ "$(uname)" == "Darwin" ]; then
     echo "Installing misc"
     source install/misc.sh
     
-    echo "Configuring nginx"
+    # echo "Configuring nginx"
     # create a backup of the original nginx.conf
-    mv /usr/local/etc/nginx/nginx.conf /usr/local/etc/nginx/nginx.original
-    ln -s ~/.dotfiles/nginx/nginx.conf /usr/local/etc/nginx/nginx.conf
+    # mv /usr/local/etc/nginx/nginx.conf /usr/local/etc/nginx/nginx.original
+    # ln -s ~/.dotfiles/nginx/nginx.conf /usr/local/etc/nginx/nginx.conf
     # symlink the code.dev from dotfiles
-    ln -s ~/.dotfiles/nginx/code.dev /usr/local/etc/nginx/sites-enabled/code.dev
+    # ln -s ~/.dotfiles/nginx/code.dev /usr/local/etc/nginx/sites-enabled/code.dev
 fi
 
 echo "creating vim directories"

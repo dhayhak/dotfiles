@@ -9,7 +9,9 @@ let maplocalleader = ','
 let g:mapleader = ','
 
 call plug#begin()
+Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-unimpaired'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'kien/ctrlp.vim'
@@ -37,7 +39,10 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'gabrielelana/vim-markdown'
+Plug 'tell-k/vim-autopep8'
 call plug#end()
+
 
 " neovim theme setting
 " https://github.com/mhartington/oceanic-next
@@ -251,3 +256,5 @@ endfunction
 
 autocmd VimEnter * call ProjectSettings()
 
+" plasticboy/vim-markdown 
+let g:markdown_enable_folding = 0
