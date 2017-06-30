@@ -28,6 +28,14 @@ brew install nvm
 brew install z
 brew install markdown
 brew install diff-so-fancy
+brew install heroku
+brew install go
+brew install jid
+brew install python3
+
+# databases
+brew install redis
+brew install mongodb
 
 # install neovim
 brew install neovim/neovim/neovim
