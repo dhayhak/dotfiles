@@ -1,0 +1,12 @@
+{
+    "libs": [
+        "chai",
+        "underscore",
+        "ecmascript"
+    ],
+    "plugins": {
+        "node": {},
+        "es_modules": {}
+    },
+    "ecmaVersion": 6
+}
