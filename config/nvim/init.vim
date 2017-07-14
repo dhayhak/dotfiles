@@ -142,6 +142,9 @@ nnoremap <leader>q :bp<cr>:bd #<cr>
 " Close buffer window
 nnoremap <leader>w :bd<cr>
 
+" Close buffer without closing window
+nnoremap <leader>e :bp<bar>sp<bar>bn<bar>bd<CR>
+
 nmap <leader>, :w<cr>
 
 nnoremap j gj
@@ -258,3 +261,4 @@ autocmd VimEnter * call ProjectSettings()
 
 " plasticboy/vim-markdown 
 let g:markdown_enable_folding = 0
+

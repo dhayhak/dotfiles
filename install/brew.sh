@@ -31,6 +31,7 @@ brew install diff-so-fancy
 brew install heroku
 brew install go
 brew install jid
+brew install python
 brew install python3
 
 # databases
