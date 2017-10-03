@@ -15,7 +15,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'kien/ctrlp.vim'
-Plug 'benekastah/neomake'
+" Plug 'benekastah/neomake'
 Plug 'millermedeiros/vim-esformatter'
 Plug 'ddollar/nerdcommenter'
 Plug 'mileszs/ack.vim'
@@ -39,8 +39,9 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'gabrielelana/vim-markdown'
 Plug 'tell-k/vim-autopep8'
+" Plug 'sbdchd/neoformat'
+Plug 'w0rp/ale'
 call plug#end()
 
 
@@ -184,8 +185,19 @@ nmap <leader>, :w<cr>
 nnoremap <CR> :noh<CR><CR>
 
 " Neomake
-let g:neomake_javascript_enabled_makers = ['eslint']
-autocmd! BufWritePost,BufEnter * Neomake
+" let g:neomake_javascript_enabled_makers = ['eslint']
+" autocmd! BufWritePost,BufEnter * Neomake
+
+" ale
+let g:ale_fixers = {
+\   'javascript': ['eslint'],
+\}
+" let g:ale_fix_on_save = 1
+
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+
 
 " vim-mocha
 let g:mocha_js_command = "!mocha --no-colors {spec}"
