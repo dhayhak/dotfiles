@@ -242,6 +242,16 @@ let g:UltiSnipsExpandTrigger="<C-j>"
 let g:UltiSnipsListSnippets="<C-l>"
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
+" 2 space indent for yaml and ruby
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType rb setlocal ts=2 sts=2 sw=2 expandtab
+
+" Spell check .md files
+autocmd BufRead,BufNewFile *.md setlocal spell
+
+" Auto wrap md files
+autocmd FileType md setlocal wrap
+
 " auto-dismiss popup preview window
 " let g:SuperTabClosePreviewOnPopupClose = 1
 
