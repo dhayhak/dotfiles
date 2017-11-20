@@ -52,23 +52,20 @@
     #   $ git churn --since='1 month ago'
     churn = "!f() { git log --all -M -C --name-only --format='format:' \"$@\" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print \"count\tfile\"} {print $1 \"\t\" $2}' | sort -g; }; f"
 [diff]
-    tool = nvimdiff
-    ; compactionHeuristic = true
-	; indentHeuristic = true
+    tool = vimdiff
+    compactionHeuristic = true
+    indentHeuristic = true
 [difftool]
     prompt = true
-[difftool "nvimdiff"]
+[difftool "vimdiff"]
     cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
-[difftool "sublimerge"]
-    cmd = subl -n --wait \"$REMOTE\" \"$LOCAL\" --command \"sublimerge_diff_views {\\\"left_read_only\\\": true, \\\"right_read_only\\\": true}\"
 [merge]
-    tool = nvimdiff
+    tool = vimdiff
     conflictstyle = diff3
 [mergetool]
-    prompt = false
-[mergetool "sublimerge"]
-    cmd = subl -n --wait \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\" --command \"sublimerge_diff_views\"
-    trustExitCode = false
+    prompt = true
+[mergetool "vimdiff"]
+  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 [heroku]
 [init]
     templatedir = /Users/andrew/.git-templates
