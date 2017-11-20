@@ -43,7 +43,6 @@ set-option -g set-titles-string "#T - #W"
 
 # enable pbcopy and pbpaste
 # https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard/blob/master/README.md
-set-option -g default-command "reattach-to-user-namespace -l zsh"
 
 # dont rename windows
 set-option -g allow-rename off
@@ -97,15 +96,13 @@ setw -g mode-keys vi
 # bind-key -t vi-copy 'v' begin-selection
 # bind-key -t vi-copy 'y' copy-selection
 bind -Tcopy-mode-vi 'v' send -X begin-selection
-bind -Tcopy-mode-vi 'y' send -X copy-pipe "reattach-to-user-namespace pbcopy"
-# bind -Tcopy-mode-vi 'y' send -X copy-pipe-and-cancel "tmux save-buffer - | reattach-to-user-namespace pbcopy"
+bind -Tcopy-mode-vi 'y' send -X copy-pipe-and-cancel "tmux save-buffer - | pbcopy"
 
 # Prevent scroll to bottom on copy
 unbind -Tcopy-mode-vi MouseDragEnd1Pane
 
 # Buffers to/from Mac clipboard, yay tmux book from pragprog
-bind C-c run "tmux save-buffer - | reattach-to-user-namespace pbcopy"
-bind C-v run "tmux set-buffer $(reattach-to-user-namespace pbpaste); tmux paste-buffer"
+bind C-v run "tmux set-buffer $(pbpaste); tmux paste-buffer"
 
 ##############################
 #### Color & Style Settings ###
