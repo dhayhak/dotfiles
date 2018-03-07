@@ -42,6 +42,8 @@ Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'tell-k/vim-autopep8'
 " Plug 'sbdchd/neoformat'
 Plug 'w0rp/ale'
+" Plug 'mzlogin/vim-markdown-toc'
+Plug 'moll/vim-bbye'
 call plug#end()
 
 
@@ -130,7 +132,7 @@ let g:airline#extensions#tabline#enabled = 1
 " => Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Quickly edit/reload the vimrc file
-nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>cv :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " Cycle through buffers
@@ -140,12 +142,13 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 " Close buffer without fucking up nerdtree
 nnoremap <leader>q :bp<cr>:bd #<cr>
 
-" Close buffer window
-nnoremap <leader>w :bd<cr>
-
 " Close buffer without closing window
-nnoremap <leader>e :bp<bar>sp<bar>bn<bar>bd<CR>
+nnoremap <leader>w :Bdelete<cr>
 
+" Close buffer *and* window
+nnoremap <leader>e :bd<cr>
+
+" Save
 nmap <leader>, :w<cr>
 
 nnoremap j gj
@@ -218,6 +221,9 @@ silent! so .vimlocal
 
 " Automatically wrap descriptions in git commits
 autocmd FileType gitcommit set tw=72
+
+" Use silver searcher (ag)
+let g:ackprg = 'ag --vimgrep'
 
 "
 " deoplete & ultisnips
