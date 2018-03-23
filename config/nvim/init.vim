@@ -15,7 +15,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'kien/ctrlp.vim'
-" Plug 'benekastah/neomake'
 Plug 'millermedeiros/vim-esformatter'
 Plug 'ddollar/nerdcommenter'
 Plug 'mileszs/ack.vim'
@@ -31,7 +30,7 @@ Plug 'artemave/spec-index.vim'
 Plug 'vim-scripts/BufOnly.vim'
 Plug 'fatih/vim-go'
 Plug 'mustache/vim-mustache-handlebars'
-" " https://www.gregjs.com/vim/2016/neovim-deoplete-jspc-ultisnips-and-tern-a-config-for-kickass-autocompletion/
+" https://www.gregjs.com/vim/2016/neovim-deoplete-jspc-ultisnips-and-tern-a-config-for-kickass-autocompletion/
 Plug 'ervandew/supertab'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -40,9 +39,7 @@ Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'tell-k/vim-autopep8'
-" Plug 'sbdchd/neoformat'
 Plug 'w0rp/ale'
-" Plug 'mzlogin/vim-markdown-toc'
 Plug 'moll/vim-bbye'
 call plug#end()
 
@@ -72,6 +69,10 @@ colorscheme monokai
 "  for Windows :  $VIM\_vimrc
 "
 "  If you don't understand a setting in here, just type ':h setting'.
+
+" https://github.com/zchee/deoplete-jedi/wiki/Setting-up-Python-for-Neovim#using-virtual-environments
+let g:python_host_prog = '/Users/andrew/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog = '/Users/andrew/.pyenv/versions/neovim3/bin/python'
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
