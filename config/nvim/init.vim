@@ -6,15 +6,16 @@ set autoread
 set bs=2 	            "backspace behavior
 set clipboard=unnamed   "Merge vim and OSX clipboards
 set copyindent          "copy the previous indentation on autoindenting
-set encoding=UTF8       "Necessary for 
+set encoding=UTF8       "vim-devicons needs this
 set expandtab           "insert spaces instead of tabs
 set foldenable
 set foldmethod=marker   "fold markers (triple brakcets)
+set hidden              "allow hidden buffers
 set history=1000        "remember more commands and search history
 set hlsearch            "highlight search terms
 set ignorecase          "ignore case when searching
 set incsearch           "show search matches as you type
-set mouse=a
+set mouse=a             "mouse in vim
 set nobackup
 set noerrorbells        "don't beep
 set noswapfile
@@ -25,6 +26,7 @@ set smarttab 	        "tab respects tabstop shiftwidth and softtabstop
 set so=4                "Scroll ahead of the cursor
 set softtabstop=4       "edit as if the tabs are 4 characters wide
 set tabstop=4 	        "visible width of tabs
+set textwidth=120       "
 set title               "change the terminal's title
 set undolevels=1000     "use many muchos levels of undo
 set visualbell          "don't beep
@@ -34,7 +36,7 @@ set wildmode=list:longest " complete files like a shell
 
 "ensure vim-plug is installed and then load it
 call plug#begin()
-Plug 'autozimu/LanguageClient-neovim', {    
+Plug 'autozimu/LanguageClient-neovim', {
    \ 'branch': 'next',
    \ 'do': 'bash install.sh',
    \ }                                  "javascript intellisense
@@ -46,7 +48,7 @@ Plug 'tpope/vim-fugitive'               "git inside vim
 Plug 'tpope/vim-repeat'                 "make more mappings repeatable with .
 Plug 'tpope/vim-surround'               "ysiw' to wrap in '
 Plug 'tpope/vim-unimpaired'             "mappings like ]q [q for :cnext :cpref
-Plug 'scrooloose/nerdtree', { 
+Plug 'scrooloose/nerdtree', {
     \ 'on': ['NERDTreeToggle',
     \        'NERDTreeFind']
     \ }                                 "file browser sidebar
@@ -80,17 +82,17 @@ call plug#end()
 "}}}
 
 "autozimu/LanguageClient-neovim {{{
-	let g:LanguageClient_autoStart = 1
-	let g:LanguageClient_serverCommands = {
-	\ 'javascript': ['javascript-typescript-stdio'],
-	\ }
+    let g:LanguageClient_autoStart = 1
+    let g:LanguageClient_serverCommands = {
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ }
 
-	nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-	nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-	nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-	"<leader>lf to fuzzy find the symbols in the current document
-	autocmd FileType javascript nnoremap <buffer>
-	  \ <leader>lf :call LanguageClient_textDocument_documentSymbol()<cr>
+    nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+    nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+    "<leader>lf to fuzzy find the symbols in the current document
+    autocmd FileType javascript nnoremap <buffer>
+                \ <leader>lf :call LanguageClient_textDocument_documentSymbol()<cr>
 "}}}
 
 "bling/vim-airline {{{
@@ -102,7 +104,7 @@ call plug#end()
     function! ToggleNerdTree()
         if @% != "" && (!exists("g:NERDTree") || (g:NERDTree.ExistsForTab() && !g:NERDTree.IsOpen()))
             :NERDTreeFind
-        else 
+        else
             :NERDTreeToggle
         endif
     endfunction
@@ -112,13 +114,13 @@ call plug#end()
 " }}}
 
 "abbreviations {{{
-	abbr funciton function
-	abbr teh the
-	abbr tempalte template
-	abbr fitler filter
-	abbr cosnt const
-	abbr attribtue attribute
-	abbr attribuet attribute
+    abbr funciton function
+    abbr teh the
+    abbr tempalte template
+    abbr fitler filter
+    abbr cosnt const
+    abbr attribtue attribute
+    abbr attribuet attribute
 "}}}
 
 "colorscheme {{{
@@ -128,16 +130,4 @@ call plug#end()
     colorscheme onedark
     syntax on
     filetype plugin indent on
-
-	"make the highlighting of tabs and other non-text less annoying
-	highlight SpecialKey ctermfg=236
-	highlight NonText ctermfg=236
-
-	"make comments and HTML attributes italic
-	highlight Comment cterm=italic
-	highlight htmlArg cterm=italic
-	highlight xmlAttrib cterm=italic
-	highlight Type cterm=italic
-	highlight Normal ctermbg=none
 "}}}
-"
