@@ -41,6 +41,7 @@ Plug 'autozimu/LanguageClient-neovim', {
    \ 'do': 'bash install.sh',
    \ }                                  "javascript intellisense
 Plug 'bling/vim-airline'
+Plug 'scrooloose/nerdcommenter'         "jsdoc comment blocks
 Plug 'joshdick/onedark.vim'             "colorscheme
 Plug 'junegunn/fzf'                     "fuzzy search
 Plug 'roxma/nvim-completion-manager'    "better than <C-X><C-O>
@@ -79,6 +80,9 @@ call plug#end()
 
     "close all other buffers
     nmap <slient> <leader>W :BufOnly<CR>
+
+    "toggle comment
+    noremap <leader>/ :call NERDComment(0,"toggle")<CR>
 "}}}
 
 "autozimu/LanguageClient-neovim {{{
@@ -129,5 +133,5 @@ call plug#end()
     let g:onedark_terminal_italics=1
     colorscheme onedark
     syntax on
-    filetype plugin indent on
+    filetype plugin on
 "}}}
