@@ -2,53 +2,148 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 filetype off                  " required
+" filetype plugin on
 
 " set a map leader for more key combos
 let mapleader = ','
 let maplocalleader = ','
 let g:mapleader = ','
 
+" Abbreviations
+abbr funciton function
+abbr teh the
+abbr tempalte template
+abbr fitler filter
+abbr cosnt const
+abbr attribtue attribute
+abbr attribuet attributebbr funciton function
+
+" Python used by ultisnips, deoplete
+let g:python_host_prog = '/Users/andrew/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog = '/Users/andrew/.pyenv/versions/neovim3/bin/python'
+
 call plug#begin()
+" Hub extension for fugitive
 Plug 'tpope/vim-rhubarb'
+
+" Git
 Plug 'tpope/vim-fugitive'
+
+" mappings which are simply short normal mode aliases for commonly used ex commands 
 Plug 'tpope/vim-unimpaired'
+
+" mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
+Plug 'tpope/vim-surround'
+
+" Pretty buffer list and bottom bar
 Plug 'bling/vim-airline'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+
+" File tree side bar
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'ryanoasis/vim-devicons'
+
+" Fuzzy file/buf search
 Plug 'kien/ctrlp.vim'
+
+" Format JS
 Plug 'millermedeiros/vim-esformatter'
+
+" JS comment blocks
 Plug 'ddollar/nerdcommenter'
+
+" Fuzzy search
 Plug 'mileszs/ack.vim'
+
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
+
+" Track git line status in gutter
 Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-surround'
 Plug 'othree/yajs.vim'
 Plug 'mxw/vim-jsx'
-Plug 'yosiat/oceanic-next-vim'
+
+" Run mocha tests inside vim
 Plug 'geekjuice/vim-mocha'
 Plug 'artemave/spec-index.vim'
+
+" Close all other buffers
 Plug 'vim-scripts/BufOnly.vim'
 Plug 'fatih/vim-go'
 Plug 'mustache/vim-mustache-handlebars'
-" https://www.gregjs.com/vim/2016/neovim-deoplete-jspc-ultisnips-and-tern-a-config-for-kickass-autocompletion/
-Plug 'ervandew/supertab'
+
+" Snippets
 Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
+let g:UltiSnipsSnippetsDir = '~/.vim/snippets'
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsListSnippets="<C-l>"
+
+" Pytnon PEP8
 Plug 'tell-k/vim-autopep8'
+
+" Javascript IntelliSense
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+let g:LanguageClient_autoStart = 1
+" Use LanguageServer for omnifunc completion
+" autocmd FileType javascript setlocal omnifunc=LanguageClient#complete
+" autocmd FileType javascript setlocal completefunc=LanguageClient#complete
+
+" Fuzzy find
+Plug 'junegunn/fzf'
+
+" Auto Completion {{{
+    " set completeopt-=preview
+    " set completeopt=longest,menuone
+    " set completeopt=longest,menuone,preview
+
+    Plug 'ervandew/supertab'
+    let g:SuperTabDefaultCompletionType = "context"
+    autocmd FileType javascript let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+    let g:SuperTabClosePreviewOnPopupClose = 1
+
+    " https://fortes.com/2017/language-server-neovim/
+    " Plug 'roxma/nvim-completion-manager'
+    " Use fuzzy matching
+    " let g:cm_matcher = {'case': 'smartcase', 'module': 'cm_matchers.fuzzy_matcher'}
+
+    
+    
+    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+    " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+    " https://www.gregjs.com/vim/2016/neovim-deoplete-jspc-ultisnips-and-tern-a-config-for-kickass-autocompletion/
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    " Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'] }
+    " Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
+    " Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
+
+    " https://github.com/zchee/deoplete-jedi/wiki/Setting-up-Python-for-Neovim#using-virtual-environments
+
+    let g:deoplete#enable_at_startup = 1
+    " let g:deoplete#omni#functions = {}
+    " let g:deoplete#omni#functions.javascript = [
+    " \ 'jspc#omni'
+    " \]
+    let g:deoplete#sources = {}
+    let g:deoplete#sources['javascript'] = ['file', 'ultisnips']
+    let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips']
+" }}}
+
 Plug 'w0rp/ale'
 Plug 'moll/vim-bbye'
+
+" FZF
+Plug '/usr/local/opt/fzf'
 call plug#end()
 
 
 " neovim theme setting
 " https://github.com/mhartington/oceanic-next
 " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-
-
 set background=dark
 syntax enable
 " colorscheme molokai
@@ -70,9 +165,6 @@ colorscheme monokai
 "
 "  If you don't understand a setting in here, just type ':h setting'.
 
-" https://github.com/zchee/deoplete-jedi/wiki/Setting-up-Python-for-Neovim#using-virtual-environments
-let g:python_host_prog = '/Users/andrew/.pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog = '/Users/andrew/.pyenv/versions/neovim3/bin/python'
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -94,12 +186,14 @@ set number
 set hidden
 
 set bs=2
-set nowrap
-set tabstop=4
-set expandtab
+set smarttab " tab respects tabstop shiftwidth and softtabstop
+set tabstop=4 " visible width of tabs
+set softtabstop=4 " edit as if the tabs are 4 characters wide
+set shiftround " round indent to a multiple of 'shiftwidth'
+set shiftwidth=4 " number of spaces to use for indent and unindent
+set expandtab " insert spaces instead of tabs
 set ignorecase    " ignore case when searching
 set autoindent    " always set autoindenting on
-set shiftwidth=4
 set copyindent    " copy the previous indentation on autoindenting
 set hlsearch      " highlight search terms
 set incsearch     " show search matches as you type
@@ -112,8 +206,16 @@ set noerrorbells         " don't beep
 set nobackup
 set noswapfile
 set mouse=a
-set pastetoggle=<F2>
+set autoread
+set wildmenu " enhanced command line completion
+set encoding=UTF8
+" set guifont=Hack\ Regular:h13
+" set pastetoggle=<F2>
 " set timeoutlen=50 ttimeoutlen=0
+
+" don't give |ins-completion-menu| messages.  For example,
+" '-- XXX completion (YYY)', 'match 1 of 2', 'The only match',
+set shortmess+=c
 
 " Scroll ahead of the cursor
 set so=5
@@ -124,10 +226,6 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules
 " Merge vim and OSX clipboards
 set clipboard=unnamed
 
-
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-" let g:airline_theme='oceanicnext'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
@@ -143,7 +241,7 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 " Close buffer without fucking up nerdtree
 nnoremap <leader>q :bp<cr>:bd #<cr>
 
-" Close buffer without closing window
+" Close buffer without closing window (moll/vim-bbye)
 nnoremap <leader>w :Bdelete<cr>
 
 " Close buffer *and* window
@@ -182,15 +280,8 @@ nmap <silent> <leader>b :bw<cr>
 " close all other buffers
 nmap <leader>W :BufOnly<CR>
 
-" shortcut to save
-nmap <leader>, :w<cr>
-
 " Enter to clear search highlight
 nnoremap <CR> :noh<CR><CR>
-
-" Neomake
-" let g:neomake_javascript_enabled_makers = ['eslint']
-" autocmd! BufWritePost,BufEnter * Neomake
 
 " ale
 let g:ale_fixers = {
@@ -200,8 +291,8 @@ let g:ale_fixers = {
 
 let g:ale_linters = {
 \   'javascript': ['eslint'],
+\   'java': ['javac'],
 \}
-
 
 " vim-mocha
 let g:mocha_js_command = "!mocha --no-colors {spec}"
@@ -226,28 +317,7 @@ autocmd FileType gitcommit set tw=72
 " Use silver searcher (ag)
 let g:ackprg = 'ag --vimgrep'
 
-"
-" deoplete & ultisnips
-" 
-let g:UltiSnipsSnippetsDir = '~/.vim/snippets'
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#omni#functions = {}
-let g:deoplete#omni#functions.javascript = [
-  \ 'tern#Complete',
-  \ 'jspc#omni'
-\]
-set completeopt=longest,menuone,preview
-let g:deoplete#sources = {}
-let g:deoplete#sources['javascript'] = ['file', 'ultisnips', 'ternjs']
-let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips', 'ternjs']
-let g:tern#command = ['tern']
-let g:tern#arguments = ['--persistent']
-
-
-autocmd FileType javascript let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsListSnippets="<C-l>"
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" Supertab
 
 " 2 space indent for yaml and ruby
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
@@ -260,13 +330,8 @@ autocmd BufRead,BufNewFile *.md setlocal spell
 autocmd FileType md setlocal wrap
 
 " auto-dismiss popup preview window
-" let g:SuperTabClosePreviewOnPopupClose = 1
 
 " disable popup preview window
-set completeopt-=preview
-"
-" /deoplete
-"
 
 " Project specific editor settings
 function! ProjectSettings()
@@ -288,6 +353,14 @@ endfunction
 
 autocmd VimEnter * call ProjectSettings()
 
-" plasticboy/vim-markdown 
-let g:markdown_enable_folding = 0
+" Debug logging
+" let g:LanguageClient_loggingLevel = 'DEBUG'
 
+let g:LanguageClient_serverCommands = {
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ }
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> <leader>z :call LanguageClient_textDocument_documentSymbol()<CR>
