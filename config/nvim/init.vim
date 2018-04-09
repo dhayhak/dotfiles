@@ -56,7 +56,6 @@
     Plug 'millermedeiros/vim-esformatter'   "js formatter
     Plug 'moll/vim-bbye'                    "close
     Plug 'mustache/vim-mustache-handlebars' "mustache handlebars syntax
-    Plug 'mxw/vim-jsx'                      "jsx syntax and indenting
     Plug 'othree/yajs.vim'                  "javascript syntax
     Plug 'roxma/nvim-completion-manager'    "better than <C-X><C-O>
     Plug 'ryanoasis/vim-devicons'           "icons next to filenames
@@ -219,9 +218,6 @@
 
     "spell check .md files
     autocmd BufRead,BufNewFile *.md setlocal spell
-
-    " Auto wrap md files
-    autocmd FileType md setlocal wrap
 
     "spell check dictionary
     if filereadable("/usr/share/dict/words")
