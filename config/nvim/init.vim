@@ -15,6 +15,7 @@
     set incsearch           "show search matches as you type
     set mouse=a             "mouse in vim
     set nobackup
+    set nocompatible
     set noerrorbells        "don't beep
     set noswapfile
     set number              "show line numbers
@@ -28,7 +29,7 @@
     set title               "change the terminal's title
     set undolevels=1000     "use many muchos levels of undo
     set visualbell          "don't beep
-    set wildignore=*.swp,*.bak,*.pyc,*.class "CtrlP ignore
+    set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules "CtrlP
     set wildmenu            "enhanced command line completion
     set wildmode=list:longest " complete files like a shell
 "}}}
@@ -38,19 +39,28 @@
     let g:python3_host_prog = '/Users/andrew/.pyenv/versions/neovim3/bin/python'
 
     call plug#begin()
+
+    Plug 'airblade/vim-gitgutter'           "(!!) git status in the gutter
     Plug 'artemave/spec-index.vim'          "test outline
     Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
         \ 'do': 'bash install.sh',
         \ }                                 "javascript intellisense
     Plug 'bling/vim-airline'                "pretty statusbar and tabbar
-    Plug 'millermedeiros/vim-esformatter'   "js formatter
+    Plug 'fatih/vim-go'                     "go vim tools
     Plug 'geekjuice/vim-mocha'              "run mocha tests in vim
     Plug 'joshdick/onedark.vim'             "colorscheme
     Plug 'junegunn/fzf'                     "fuzzy file search
+    "Plug 'kien/ctrlp.vim'                  "fuzzy file search
     Plug 'mileszs/ack.vim'                  "fuzzy file content search
+    Plug 'millermedeiros/vim-esformatter'   "js formatter
+    Plug 'moll/vim-bbye'                    "close
+    Plug 'mustache/vim-mustache-handlebars' "mustache handlebars syntax
+    Plug 'mxw/vim-jsx'                      "jsx syntax and indenting
+    Plug 'othree/yajs.vim'                  "javascript syntax
     Plug 'roxma/nvim-completion-manager'    "better than <C-X><C-O>
     Plug 'ryanoasis/vim-devicons'           "icons next to filenames
+    Plug 'tell-k/vim-autopep8'              "python formatter
     Plug 'tpope/vim-fugitive'               "git inside vim
     Plug 'tpope/vim-repeat'                 "make more mappings repeatable with .
     Plug 'tpope/vim-surround'               "ysiw' to wrap in '
@@ -60,7 +70,10 @@
         \ 'on': ['NERDTreeToggle',
         \        'NERDTreeFind']
         \ }                                 "file browser sidebar
+
+    Plug 'SirVer/ultisnips'                 "snippets
     Plug 'vim-scripts/BufOnly.vim'          "close all other buffers
+    Plug 'w0rp/ale'                         "linter
     call plug#end()
 "}}}
 
@@ -79,11 +92,27 @@
     "millermedeiros/esformatter
     map <leader>f :Esformatter<CR>
 
+    "moll/vim-bbye close buffer without closing window
+    nnoremap <leader>w :Bdelete<cr>
+
     "scrooloose/nerdcommenter
     noremap <leader>/ :call NERDComment(0,"toggle")<CR>
 
     "vim-scripts/BufOnly.vim
     nmap <silent><leader>W :BufOnly<CR>
+
+    " save
+    nmap <leader>, :w<cr>
+
+    "cusor behave with wrapped lines
+    nnoremap j gj
+    nnoremap k gk
+    vnoremap j gj
+    vnoremap k gk
+
+    " Cycle through buffers
+    :nnoremap <Tab> :bnext<CR>
+    :nnoremap <S-Tab> :bprevious<CR>
 
     "quickly edit/reload the vimrc file
     nmap <silent> <leader>cv :e $MYVIMRC<cr>
@@ -152,7 +181,25 @@
     endfunction
 
     noremap <C-n> :NERDTreeToggle<cr>
-    nmap <silent> <leader>f :NERDTreeFind<cr>
+    nmap <silent> <leader>l :NERDTreeFind<cr>
+"}}}
+
+"SirVer/ultisnips {{{
+    let g:UltiSnipsSnippetsDir = '~/.vim/snippets'
+    let g:UltiSnipsExpandTrigger="<C-j>"
+    let g:UltiSnipsListSnippets="<C-l>"
+"}}}
+"
+"w0rp/ale {{{
+    let g:ale_fix_on_save = 1
+    let g:ale_fixers = {
+    \   'javascript': ['eslint'],
+    \}
+
+    let g:ale_linters = {
+    \   'javascript': ['eslint'],
+    \   'java': ['javac'],
+    \}
 "}}}
 
 "abbreviations {{{
@@ -183,6 +230,9 @@
 "}}}
 
 "project specific settings {{{
+    "load local project directory settings
+    silent! so .vimlocal
+
     function! ProjectSettings()
         " smooch-core-js settings
         let smooch_core_js = matchstr(getcwd(), 'git/smooch-core-js')
