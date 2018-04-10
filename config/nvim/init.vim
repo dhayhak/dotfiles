@@ -40,8 +40,9 @@
 
     call plug#begin()
 
-    Plug 'airblade/vim-gitgutter'           "(!!) git status in the gutter
+    Plug 'airblade/vim-gitgutter'           "git status in the gutter
     Plug 'artemave/spec-index.vim'          "test outline
+    "Fucks up Ack
     Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
         \ 'do': 'bash install.sh',
@@ -70,7 +71,6 @@
         \ 'on': ['NERDTreeToggle',
         \        'NERDTreeFind']
         \ }                                 "file browser sidebar
-
     Plug 'SirVer/ultisnips'                 "snippets
     Plug 'vim-scripts/BufOnly.vim'          "close all other buffers
     Plug 'w0rp/ale'                         "linter
@@ -158,6 +158,9 @@
     \ 'javascript': ['javascript-typescript-stdio'],
     \ }
 
+    "prevent interference with Ack
+    let g:LanguageClient_diagnosticsList = "location"
+
     nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
     nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
     nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
@@ -187,7 +190,6 @@
 "mileszs/ack.vim {{{
     if executable('ag')
         let g:ackprg = 'ag --vimgrep'
-        let g:ack_use_dispatch = 1
     endif
 "}}}
 
