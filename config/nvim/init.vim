@@ -47,11 +47,11 @@
         \ 'do': 'bash install.sh',
         \ }                                 "javascript intellisense
     Plug 'bling/vim-airline'                "pretty statusbar and tabbar
+    "Plug 'ctrlpvim/ctrlp.vim'               "fuzzy file search
     Plug 'fatih/vim-go'                     "go vim tools
     Plug 'geekjuice/vim-mocha'              "run mocha tests in vim
     Plug 'joshdick/onedark.vim'             "colorscheme
-    Plug 'junegunn/fzf'                     "fuzzy file search
-    "Plug 'kien/ctrlp.vim'                  "fuzzy file search
+    Plug 'junegunn/fzf.vim'                 "fuzzy file search
     Plug 'mileszs/ack.vim'                  "fuzzy file content search
     Plug 'millermedeiros/vim-esformatter'   "js formatter
     Plug 'moll/vim-bbye'                    "close
@@ -60,6 +60,7 @@
     Plug 'roxma/nvim-completion-manager'    "better than <C-X><C-O>
     Plug 'ryanoasis/vim-devicons'           "icons next to filenames
     Plug 'tell-k/vim-autopep8'              "python formatter
+    Plug 'tpope/vim-dispatch'               "let ack run independently
     Plug 'tpope/vim-fugitive'               "git inside vim
     Plug 'tpope/vim-repeat'                 "make more mappings repeatable with .
     Plug 'tpope/vim-surround'               "ysiw' to wrap in '
@@ -76,6 +77,17 @@
     call plug#end()
 "}}}
 
+" functions {{{
+    function! QuickfixToggle()
+        let nr = winnr("$")
+        copen 10
+        let nr2 = winnr("$")
+        if nr == nr2
+            cclose 10
+        endif
+    endfunction
+"}}}
+
 "mappings {{{
     "map leader for more commands
     let mapleader = ','
@@ -84,9 +96,6 @@
 
     "artemave/spec-index.vim
     nnoremap <Leader>si :ShowSpecIndex<cr>
-
-    "junegunn/fzf
-    nnoremap <C-p> :FZF<cr>
 
     "millermedeiros/esformatter
     map <leader>f :Esformatter<CR>
@@ -103,6 +112,16 @@
     " save
     nmap <leader>, :w<cr>
 
+    "quickly edit/reload the vimrc file
+    nmap <silent> <leader>cv :e $MYVIMRC<cr>
+    nmap <silent> <leader>sv :so $MYVIMRC<cr>
+    nmap <silent> <leader>pi :so $MYVIMRC<cr>:PlugInstall<cr>
+
+    "toggle and grow quickfix
+    noremap <leader>q :copen 40<cr>
+    noremap <leader>a :copen 10<cr>
+    noremap <leader>z :call QuickfixToggle()<cr>
+
     "cusor behave with wrapped lines
     nnoremap j gj
     nnoremap k gk
@@ -113,10 +132,6 @@
     :nnoremap <Tab> :bnext<CR>
     :nnoremap <S-Tab> :bprevious<CR>
 
-    "quickly edit/reload the vimrc file
-    nmap <silent> <leader>cv :e $MYVIMRC<cr>
-    nmap <silent> <leader>sv :so $MYVIMRC<cr>
-    nmap <silent> <leader>pi :so $MYVIMRC<cr>:PlugInstall<cr>
 
     "popup menu navigation
     inoremap <expr><TAB> pumvisible() ? "\<C-n>": "\<TAB>"
@@ -157,16 +172,22 @@
 "}}}
 
 "geekjuice/vim-mocha {{{
-    let g:mocha_js_command = "!mocha --no-colors {spec}"
-    map <Leader>a :call RunAllSpecs()<CR>
-    map <Leader>t :call RunCurrentSpecFile()<CR>
+    let g:mocha_js_command = "Dispatch mocha --colors {spec}"
+    "map <Leader>a :call RunAllSpecs()<CR>
+    "map <Leader>t :call RunCurrentSpecFile()<CR>
     map <Leader>s :call RunNearestSpec()<CR>
     map <Leader>l :call RunLastSpec()<CR>
+"}}}
+
+"junegunn/fzf{{{
+    nnoremap <C-p> :FZF<cr>
+    let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 "}}}
 
 "mileszs/ack.vim {{{
     if executable('ag')
         let g:ackprg = 'ag --vimgrep'
+        let g:ack_use_dispatch = 1
     endif
 "}}}
 
@@ -180,15 +201,14 @@
     endfunction
 
     noremap <C-n> :NERDTreeToggle<cr>
-    nmap <silent> <leader>l :NERDTreeFind<cr>
+    nmap <silent> <leader>t :NERDTreeFind<cr>
 "}}}
 
 "SirVer/ultisnips {{{
-    let g:UltiSnipsSnippetsDir = '~/.vim/snippets'
     let g:UltiSnipsExpandTrigger="<C-j>"
     let g:UltiSnipsListSnippets="<C-l>"
 "}}}
-"
+
 "w0rp/ale {{{
     let g:ale_fix_on_save = 1
     let g:ale_fixers = {

@@ -1,0 +1,113 @@
+snippet iife
+(function () {
+	$1
+})();
+endsnippet
+
+snippet log "Insert cosole.log"
+console.log($1);
+endsnippet
+snippet logc "Insert log with color"
+console.log('%c$1', 'font-weight:bold;color:${2:green};');
+endsnippet
+
+snippet doc "Doc Comment" b
+/**
+ * $1
+ */
+endsnippet
+
+snippet esl "eslint disable line"
+// eslint-disable-line $1
+endsnippet
+
+snippet imp "import default from" b
+import $1 from '$2';
+endsnippet
+
+snippet imd "import destructure" b
+import { $1 } from '$2';
+endsnippet
+
+snippet ima "import * as " b
+import * as $1 from '$2'
+endsnippet
+
+snippet for "for" i
+for ($1) {
+  $2
+}$3
+endsnippet
+
+snippet c "curly braces with identation" i
+{
+  $1
+}
+endsnippet
+
+snippet fn "named function" i
+function $1($2) {
+  $3
+}$4
+endsnippet
+
+snippet ff "anonymous function" i
+function($1) {
+  $2
+}$3
+endsnippet
+
+snippet af "arrow function" i
+($1) => {
+  $2
+}$3
+endsnippet
+
+snippet fa "one line arrow function" i
+($1) => $2
+endsnippet
+
+snippet cl "console.log(...)" i
+console.log('>>>$1', $1)
+endsnippet
+
+snippet clj "JSON.stringify formatted" i
+console.log(JSON.stringify($1, null, 2))
+endsnippet
+
+snippet if "if statement" i
+if ($1) {
+  $2
+}$3
+endsnippet
+
+snippet el "else statement" i
+else {
+  $1
+}$2
+endsnippet
+
+snippet iife "Immediately-invoked function expression"
+(function() {
+  'use strict';
+
+  $1
+})();
+endsnippet
+
+############# Node.js
+snippet me "module.exports" b
+module.exports = $0
+endsnippet
+
+snippet ee "exports"
+exports = $0
+endsnippet
+
+snippet rr "just require"
+require('$1')
+endsnippet
+
+snippet cr "ES6 require"
+const $1 = require('$1')
+endsnippet
