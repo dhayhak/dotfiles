@@ -18,6 +18,7 @@
     set nocompatible
     set noerrorbells        "don't beep
     set noswapfile
+    set nowrap              "turn off line wrapping
     set number              "show line numbers
     set shiftround          "round indent to a multiple of 'shiftwidth'
     set shiftwidth=4        "number of spaces to use for indent and unindent
@@ -42,17 +43,18 @@
 
     Plug 'airblade/vim-gitgutter'           "git status in the gutter
     Plug 'artemave/spec-index.vim'          "test outline
-    "Fucks up Ack
     Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
         \ 'do': 'bash install.sh',
         \ }                                 "javascript intellisense
     Plug 'bling/vim-airline'                "pretty statusbar and tabbar
-    "Plug 'ctrlpvim/ctrlp.vim'               "fuzzy file search
+    Plug 'ctrlpvim/ctrlp.vim'               "fuzzy file search
     Plug 'fatih/vim-go'                     "go vim tools
     Plug 'geekjuice/vim-mocha'              "run mocha tests in vim
+    Plug 'heavenshell/vim-jsdoc'            "jsdoc function comments
     Plug 'joshdick/onedark.vim'             "colorscheme
     Plug 'junegunn/fzf.vim'                 "fuzzy file search
+    Plug 'kannokanno/previm'                "markdown preview
     Plug 'mileszs/ack.vim'                  "fuzzy file content search
     Plug 'millermedeiros/vim-esformatter'   "js formatter
     Plug 'moll/vim-bbye'                    "close
@@ -150,10 +152,14 @@
 
     " Automatically wrap descriptions in git commits
     autocmd FileType gitcommit set tw=72
+
+    " Turn wrapping on for markdown
+    autocmd FileType markdown set wrap
+    autocmd FileType markdown set linebreak
 "}}}
 
 "autozimu/LanguageClient-neovim {{{
-    let g:LanguageClient_autoStart = 1
+    "let g:LanguageClient_autoStart = 1
     let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ }
@@ -183,8 +189,16 @@
 "}}}
 
 "junegunn/fzf{{{
-    nnoremap <C-p> :FZF<cr>
-    let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+    "nnoremap <C-p> :FZF<cr>
+    "let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+"}}}
+
+"kannokanno/previm{{{
+    let g:previm_open_cmd = 'open -a Google\ Chrome'
+    augroup PrevimSettings
+        autocmd!
+        autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+    augroup END
 "}}}
 
 "mileszs/ack.vim {{{
@@ -209,10 +223,12 @@
 "SirVer/ultisnips {{{
     let g:UltiSnipsExpandTrigger="<C-j>"
     let g:UltiSnipsListSnippets="<C-l>"
+    let g:UltiSnipsJumpForwardTrigger="<C-l>"
+    let g:UltiSnipsJumpBackwardTrigger="<C-h>"
 "}}}
 
 "w0rp/ale {{{
-    let g:ale_fix_on_save = 1
+    "let g:ale_fix_on_save = 1
     let g:ale_fixers = {
     \   'javascript': ['eslint'],
     \}
@@ -231,6 +247,7 @@
     abbr cosnt const
     abbr attribtue attribute
     abbr attribuet attribute
+    abbr toSTring toString
 "}}}
 
 "language specific settings {{{
