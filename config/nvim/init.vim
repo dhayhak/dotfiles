@@ -3,6 +3,7 @@
     set autoread
     set bs=2 	            "backspace behavior
     set clipboard=unnamed   "Merge vim and OSX clipboards
+    set completeopt=longest,menuone
     set copyindent          "copy the previous indentation on autoindenting
     set encoding=UTF8       "vim-devicons needs this
     set expandtab           "insert spaces instead of tabs
@@ -29,6 +30,7 @@
     set textwidth=120       "
     set title               "change the terminal's title
     set undolevels=1000     "use many muchos levels of undo
+    set updatetime=750      "speed up gitgutter
     set visualbell          "don't beep
     set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules "CtrlP
     set wildmenu            "enhanced command line completion
@@ -51,10 +53,12 @@
     Plug 'ctrlpvim/ctrlp.vim'               "fuzzy file search
     Plug 'fatih/vim-go'                     "go vim tools
     Plug 'geekjuice/vim-mocha'              "run mocha tests in vim
+    Plug 'haron-prime/evening_vim'          "colorscheme with better diff
     Plug 'heavenshell/vim-jsdoc'            "jsdoc function comments
     Plug 'joshdick/onedark.vim'             "colorscheme
     Plug 'junegunn/fzf.vim'                 "fuzzy file search
     Plug 'kannokanno/previm'                "markdown preview
+    Plug 'leafgarland/typescript-vim'       "typescript syntax
     Plug 'mileszs/ack.vim'                  "fuzzy file content search
     Plug 'millermedeiros/vim-esformatter'   "js formatter
     Plug 'moll/vim-bbye'                    "close
@@ -66,6 +70,7 @@
     Plug 'tpope/vim-dispatch'               "let ack run independently
     Plug 'tpope/vim-fugitive'               "git inside vim
     Plug 'tpope/vim-repeat'                 "make more mappings repeatable with .
+    Plug 'tpope/vim-rhubarb'                "github integration
     Plug 'tpope/vim-surround'               "ysiw' to wrap in '
     Plug 'tpope/vim-unimpaired'             "mappings like ]q [q for :cnext :cpref
     Plug 'scrooloose/nerdcommenter'         "jsdoc comment blocks
@@ -138,10 +143,10 @@
     "popup menu navigation
     inoremap <expr><TAB> pumvisible() ? "\<C-n>": "\<TAB>"
     inoremap <expr><S-TAB> pumvisible() ? "\<C-p>": "\<S-TAB>"
-    inoremap <expr> j pumvisible() ? "\<C-N>" : "j"
-    inoremap <expr> k pumvisible() ? "\<C-P>" : "k"
+    "inoremap <expr><C-j> pumvisible() ? "\<C-N>" : "\<C-j>"
+    "inoremap <expr><C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
 
-    inoremap jk <esc>
+    "inoremap jk <esc>
 
     "enter to clear search highlight
     nnoremap <CR> :noh<CR><CR>
@@ -159,9 +164,14 @@
 "}}}
 
 "autozimu/LanguageClient-neovim {{{
-    "let g:LanguageClient_autoStart = 1
+    let g:LanguageClient_autoStart = 1
     let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'dockerfile': ['docker-langserver --stdio'],
     \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['javascript-typescript-stdio', '--try-flow-bin --stdio'],
+    \ 'python': ['pyls'],
+    \ 'go': ['go-langserver'],
     \ }
 
     "prevent interference with Ack
@@ -169,6 +179,8 @@
 
     nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
     nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
+    nnoremap <silent> ga :call LanguageClient_textDocument_codeAction()<CR>
     nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
     "<leader>lf to fuzzy find the symbols in the current document
     autocmd FileType javascript nnoremap <buffer>
@@ -178,6 +190,11 @@
 "bling/vim-airline {{{
     let g:airline_powerline_fonts = 1
     let g:airline#extensions#tabline#enabled = 1
+"}}}
+
+
+"ctrlpvim/ctrlp.vim {{{
+    let g:ctrlp_custom_ignore = 'node_modules'
 "}}}
 
 "geekjuice/vim-mocha {{{
@@ -248,6 +265,9 @@
     abbr attribtue attribute
     abbr attribuet attribute
     abbr toSTring toString
+    abbr requrie require
+    abbr accpet accept
+    abbr requset request
 "}}}
 
 "language specific settings {{{
@@ -295,9 +315,23 @@
 
 "colorscheme {{{
     "colorscheme monokai
-    let g:onedark_termcolors=256
-    let g:onedark_terminal_italics=1
-    colorscheme onedark
+    "let g:onedark_termcolors=256
+    "let g:onedark_terminal_italics=1
+    "colorscheme onedark
+    colorscheme evening
     syntax on
     filetype plugin on
+
+    if &diff
+        "colorscheme evening
+        " Make diff look less awful
+        " https://stackoverflow.com/questions/2019281/load-different-colorscheme-when-using-vimdiff
+        highlight! link DiffText MatchParen
+
+        "highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+        "highlight DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+        "highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+        "highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
+    endif
+    
 "}}}

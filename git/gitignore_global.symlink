@@ -22,3 +22,8 @@ tscommand*.txt
 
 .tern-port
 .tern-project
+
+.python-version
+
+.env-*
+.vimlocal
