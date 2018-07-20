@@ -23,6 +23,7 @@
     set number              "show line numbers
     set shiftround          "round indent to a multiple of 'shiftwidth'
     set shiftwidth=4        "number of spaces to use for indent and unindent
+    set showtabline=2       "show tab line at the top
     set smarttab 	        "tab respects tabstop shiftwidth and softtabstop
     set so=4                "Scroll ahead of the cursor
     set softtabstop=4       "edit as if the tabs are 4 characters wide
@@ -49,16 +50,17 @@
         \ 'branch': 'next',
         \ 'do': 'bash install.sh',
         \ }                                 "javascript intellisense
-    Plug 'bling/vim-airline'                "pretty statusbar and tabbar
     Plug 'ctrlpvim/ctrlp.vim'               "fuzzy file search
     Plug 'fatih/vim-go'                     "go vim tools
     Plug 'geekjuice/vim-mocha'              "run mocha tests in vim
     Plug 'haron-prime/evening_vim'          "colorscheme with better diff
     Plug 'heavenshell/vim-jsdoc'            "jsdoc function comments
+    Plug 'itchyny/lightline.vim'            "pretty statusbar and tabbar
     Plug 'joshdick/onedark.vim'             "colorscheme
     Plug 'junegunn/fzf.vim'                 "fuzzy file search
     Plug 'kannokanno/previm'                "markdown preview
     Plug 'leafgarland/typescript-vim'       "typescript syntax
+    Plug 'mgee/lightline-bufferline'        "tabline buffers for lightline
     Plug 'mileszs/ack.vim'                  "fuzzy file content search
     Plug 'millermedeiros/vim-esformatter'   "js formatter
     Plug 'moll/vim-bbye'                    "close
@@ -187,12 +189,6 @@
                 \ <leader>lf :call LanguageClient_textDocument_documentSymbol()<cr>
 "}}}
 
-"bling/vim-airline {{{
-    let g:airline_powerline_fonts = 1
-    let g:airline#extensions#tabline#enabled = 1
-"}}}
-
-
 "ctrlpvim/ctrlp.vim {{{
     let g:ctrlp_custom_ignore = 'node_modules'
 "}}}
@@ -203,6 +199,47 @@
     "map <Leader>t :call RunCurrentSpecFile()<CR>
     map <Leader>s :call RunNearestSpec()<CR>
     map <Leader>l :call RunLastSpec()<CR>
+"}}}
+
+"itchyny/lightline.vim {{{
+    let g:lightline = {
+    \   'colorscheme': 'default',
+    \   'active': {
+    \     'left':[ [ 'mode', 'paste' ],
+    \              [ 'gitbranch', 'readonly', 'filename', 'modified' ]
+    \     ],
+    \     'right': [ [ 'lineinfo' ],
+    \                [ 'percent' ],
+    \                [ 'fileformat', 'fileencoding', 'filetype', 'charvaluehex' ]
+    \     ]
+    \   },
+    \   'component': {
+    \     'lineinfo': ' %3l:%-2v',
+    \     'charvaluehex': '0x%B',
+    \   },
+    \   'component_function': {
+    \     'gitbranch': 'fugitive#head',
+    \   },
+    \   'component_expand': {
+    \     'buffers': 'lightline#bufferline#buffers',
+    \   },
+    \   'component_type': {
+    \     'buffers': 'tabsel',
+    \   }
+    \ }
+
+    let g:lightline.separator = {
+    \   'left': '', 'right': ''
+    \}
+
+    let g:lightline.subseparator = {
+    \   'left': '', 'right': ''
+    \}
+
+    let g:lightline.tabline = {
+    \   'left': [ ['buffers'] ],
+    \   'right': [ ['close'] ]
+    \ }
 "}}}
 
 "junegunn/fzf{{{
