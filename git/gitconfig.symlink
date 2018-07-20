@@ -78,3 +78,7 @@
     meta = blue black bold
 [commit]
 	gpgsign = true
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true
