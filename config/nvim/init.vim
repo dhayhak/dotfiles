@@ -28,7 +28,7 @@
     set so=4                "Scroll ahead of the cursor
     set softtabstop=4       "edit as if the tabs are 4 characters wide
     set tabstop=4 	        "visible width of tabs
-    set textwidth=120       "
+    set textwidth=120       "automaticlaly add newlines for text longer than 120 cols
     set title               "change the terminal's title
     set undolevels=1000     "use many muchos levels of undo
     set updatetime=750      "speed up gitgutter
@@ -158,11 +158,17 @@
     nnoremap <C-y> 3<C-y>
 
     " Automatically wrap descriptions in git commits
-    autocmd FileType gitcommit set tw=72
+    autocmd FileType gitcommit set textwidth=72
 
-    " Turn wrapping on for markdown
-    autocmd FileType markdown set wrap
-    autocmd FileType markdown set linebreak
+    " Turn wrapping on for markdown and text
+    autocmd FileType markdown,text set wrap
+    autocmd FileType markdown,text set linebreak
+
+    " Turn textwidth off for markdown and text
+    autocmd FileType markdown,text set textwidth=0
+
+    " Set filetype to text by defailt
+    autocmd BufEnter * if &filetype == "" | setlocal ft=text | endif
 "}}}
 
 "autozimu/LanguageClient-neovim {{{
@@ -205,7 +211,7 @@
     let g:lightline = {
     \   'colorscheme': 'default',
     \   'active': {
-    \     'left':[ [ 'mode', 'paste' ],
+    \     'left':[ [ 'mode' ],
     \              [ 'gitbranch', 'readonly', 'filename', 'modified' ]
     \     ],
     \     'right': [ [ 'lineinfo' ],
@@ -256,9 +262,13 @@
 "}}}
 
 "mileszs/ack.vim {{{
-    if executable('ag')
-        let g:ackprg = 'ag --vimgrep'
-    endif
+    let g:ackprg = 'ack --sort-files'
+    "if executable('ag')
+        "let g:ackprg = 'ag --vimgrep'
+    "endif
+    
+    " Alias Ack! to F
+    :command! -nargs=* F Ack! <args>
 "}}}
 
 "scrooloose/nerdtree {{{
@@ -282,9 +292,10 @@
 "}}}
 
 "w0rp/ale {{{
-    "let g:ale_fix_on_save = 1
+    let g:ale_fix_on_save = 0
     let g:ale_fixers = {
-    \   'javascript': ['eslint'],
+    \   'javascript': ['prettier'],
+    \   'JSON': ['prettier'],
     \}
 
     let g:ale_linters = {
@@ -313,7 +324,8 @@
     autocmd FileType rb setlocal ts=2 sts=2 sw=2 expandtab
 
     "spell check .md files
-    autocmd BufRead,BufNewFile *.md setlocal spell
+    "autocmd BufRead,BufNewFile *.js,*.md setlocal spell
+    autocmd FileType markdown,rst,text,yaml,js setlocal spell
 
     "spell check dictionary
     if filereadable("/usr/share/dict/words")
@@ -334,10 +346,12 @@
             let g:mocha_js_command = "!mocha --compilers js:babel-core/register --require ./test-setup.js {spec}"
         endif
 
-
-        let smooch = matchstr(getcwd(), 'git/smooch')
-        if !empty(smooch_core_js)
+        " smooch-docs settings
+        let smooch_docs = matchstr(getcwd(), 'git/smooch-docs')
+        if !empty(smooch_docs)
+            let g:ale_fix_on_save = 0
         endif
+            
 
         " let smooch_debuggler = matchstr(getcwd(), 'git/smooch-debuggler')
         " if !empty(smooch_debuggler)
