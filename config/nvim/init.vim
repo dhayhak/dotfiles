@@ -383,6 +383,13 @@
             let g:NERDTreeIgnore = ['node_modules', 'dist', 'build']
         endif
 
+        " smooch-web-private settings
+        let smooch_web_private = matchstr(getcwd(), 'git/smooch-web-private')
+        if !empty(smooch_web_private)
+            let g:ctrlp_custom_ignore = 'node_modules\|dist\|build'
+            let g:NERDTreeIgnore = ['node_modules', 'dist', 'build']
+        endif
+
         " let smooch_debuggler = matchstr(getcwd(), 'git/smooch-debuggler')
         " if !empty(smooch_debuggler)
         "     let g:ctrlp_custom_ignore = 'lib\|dist\|amd'
