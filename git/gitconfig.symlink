@@ -70,9 +70,10 @@
 [init]
     templatedir = /Users/andrew/.git-templates
 [filter "lfs"]
-    clean = git-lfs clean %f
-    smudge = git-lfs smudge %f
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
     required = true
+	process = git-lfs filter-process
 [github-pr-stats "github.com"]
 [color "diff"]
     meta = blue black bold

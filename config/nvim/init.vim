@@ -20,7 +20,8 @@
     set noerrorbells        "don't beep
     set noswapfile
     set nowrap              "turn off line wrapping
-    set number              "show line numbers
+    set number              "show current line number
+    set relativenumber      "show relative line numbers
     set shiftround          "round indent to a multiple of 'shiftwidth'
     set shiftwidth=4        "number of spaces to use for indent and unindent
     set showtabline=2       "show tab line at the top
@@ -167,8 +168,22 @@
     " Turn textwidth off for markdown and text
     autocmd FileType markdown,text set textwidth=0
 
+    " Set quickfix filetype default
+    augroup quickfix
+        autocmd!
+        autocmd FileType qf setlocal wrap
+        autocmd FileType qf setlocal nospell
+    augroup END
+
     " Set filetype to text by defailt
     autocmd BufEnter * if &filetype == "" | setlocal ft=text | endif
+
+    " Turn off spellcheck for certain file types
+    " For some reason this doesn't work I have no idea why, so I have the
+    " BufEnter shit instead
+    " autocmd FileType yaml setlocal nospell
+    autocmd BufEnter *.yml setlocal nospell
+    autocmd BufEnter *.yaml setlocal nospell
 "}}}
 
 "autozimu/LanguageClient-neovim {{{
@@ -176,6 +191,7 @@
     let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'dockerfile': ['docker-langserver --stdio'],
+    \ 'typescript': ['javascript-typescript-stdio'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio', '--try-flow-bin --stdio'],
     \ 'python': ['pyls'],
@@ -293,12 +309,20 @@
 
 "w0rp/ale {{{
     let g:ale_fix_on_save = 0
+    let g:ale_javascript_prettier_use_global = 1
+
+    " ale forces eslint to run against .ts files, but we don't want it to
+    let g:ale_javascript_eslint_options = '--ignore-pattern *.ts'
+
     let g:ale_fixers = {
     \   'javascript': ['prettier'],
     \   'JSON': ['prettier'],
+    \   'markdown': ['prettier'],
+    \   'python': ['pep-8'],
     \}
 
     let g:ale_linters = {
+    \   'typescript': ['tslint'],
     \   'javascript': ['eslint'],
     \   'java': ['javac'],
     \}
@@ -342,7 +366,7 @@
         let smooch_core_js = matchstr(getcwd(), 'git/smooch-core-js')
         if !empty(smooch_core_js)
             let g:ctrlp_custom_ignore = 'lib\|dist\|amd'
-            let g:NERDTreeIgnore = ['lib', 'dist', 'amd']
+            let g:NERDTreeIgnore = ['lib', 'dist', 'amd', 'build']
             let g:mocha_js_command = "!mocha --compilers js:babel-core/register --require ./test-setup.js {spec}"
         endif
 
@@ -351,7 +375,13 @@
         if !empty(smooch_docs)
             let g:ale_fix_on_save = 0
         endif
-            
+
+        " smooch settings
+        let smooch = matchstr(getcwd(), 'git/agent-console')
+        if !empty(smooch)
+            let g:ctrlp_custom_ignore = 'node_modules\|dist\|build'
+            let g:NERDTreeIgnore = ['node_modules', 'dist', 'build']
+        endif
 
         " let smooch_debuggler = matchstr(getcwd(), 'git/smooch-debuggler')
         " if !empty(smooch_debuggler)
@@ -384,5 +414,11 @@
         "highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
         "highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
     endif
+
+    "hi SpellBad ctermfg=www ctermbg=xxx guifg=#yyyyyy guibg=#zzzzzz
+    "hi SpellCap ctermfg=www ctermbg=xxx guifg=#yyyyyy guibg=#zzzzzz
+    hi SpellBad ctermbg=052 guibg=5f0000
+    hi SpellCap ctermbg=236 guibg=303030
+    hi Search cterm=NONE ctermfg=NONE ctermbg=058
     
 "}}}
