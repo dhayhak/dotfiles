@@ -63,7 +63,6 @@
     Plug 'leafgarland/typescript-vim'       "typescript syntax
     Plug 'mgee/lightline-bufferline'        "tabline buffers for lightline
     Plug 'mileszs/ack.vim'                  "fuzzy file content search
-    Plug 'millermedeiros/vim-esformatter'   "js formatter
     Plug 'moll/vim-bbye'                    "close
     Plug 'mustache/vim-mustache-handlebars' "mustache handlebars syntax
     Plug 'othree/yajs.vim'                  "javascript syntax
@@ -106,9 +105,6 @@
 
     "artemave/spec-index.vim
     nnoremap <Leader>si :ShowSpecIndex<cr>
-
-    "millermedeiros/esformatter
-    map <leader>f :Esformatter<CR>
 
     "moll/vim-bbye close buffer without closing window
     nnoremap <leader>w :Bdelete<cr>
@@ -201,8 +197,11 @@
     "prevent interference with Ack
     let g:LanguageClient_diagnosticsList = "location"
 
-    nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+    
+    nnoremap <silent> K :call LanguageClient_contextMenu()<CR>
+    "nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
     nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <silent> gt :call LanguageClient#textDocument_typeDefinition()<CR>
     nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
     nnoremap <silent> ga :call LanguageClient_textDocument_codeAction()<CR>
     nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
@@ -314,11 +313,14 @@
     " ale forces eslint to run against .ts files, but we don't want it to
     let g:ale_javascript_eslint_options = '--ignore-pattern *.ts'
 
+    "nnoremap <silent> <leader>f :ALEFix<CR>
+    map <leader>f :ALEFix tslint<CR>
+
     let g:ale_fixers = {
+    \   'typescript': ['prettier'],
     \   'javascript': ['prettier'],
     \   'JSON': ['prettier'],
-    \   'markdown': ['prettier'],
-    \   'python': ['pep-8'],
+    \   'markdown': ['prettier']
     \}
 
     let g:ale_linters = {
@@ -381,6 +383,7 @@
         if !empty(smooch)
             let g:ctrlp_custom_ignore = 'node_modules\|dist\|build'
             let g:NERDTreeIgnore = ['node_modules', 'dist', 'build']
+            let g:ale_fix_on_save = 1
         endif
 
         " smooch-web-private settings
