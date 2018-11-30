@@ -1,6 +1,19 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
+#zshrc profiling
+#zmodload zsh/zprof
+
+# https://kev.inburke.com/kevin/profiling-zsh-startup-time/
+# http://jb-blog.readthedocs.io/en/latest/posts/0032-debugging-zsh-startup-time.html
+PROFILE_STARTUP=false
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+    PS4=$'%D{%M%S%.} %N:%i> '
+    exec 3>&2 2>/tmp/startlog.$$
+    setopt xtrace prompt_subst
+fi
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -26,17 +39,17 @@ ZSH_THEME="avit"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
+HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -45,8 +58,9 @@ ZSH_THEME="avit"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-# plugins=(git)
-plugins=(git)
+#plugins=(git)
+#plugins=(git nvm)
+plugins=(git zsh-autosuggestions)
 
 # Env vars go here
 if [ -e ~/.vars ];then
@@ -57,19 +71,26 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="/usr/local/heroku/bin:/usr/local/Cellar/postgresql/9.3.4/bin:/user/local/git/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+#export PATH="/usr/local/heroku/bin:/usr/local/Cellar/postgresql/9.3.4/bin:/user/local/git/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="/usr/local/rabbitmq_server-3.6.6/sbin:$PATH"
 export PATH=$HOME/Library/Android/sdk/platform-tools:$PATH
 # export MANPATH="/usr/local/man:$MANPATH"
 
-export EDITOR=vim
+export EDITOR=nvim
 export NODE_REPL_MODE=strict
 export NODE_REPL_HISTORY_FILE=$HOME/.node_repl_history
 export XDG_CONFIG_HOME=$HOME/.config
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+
+
+# Make nvim pyenv stop complaning
+export PYENV_ROOT=$HOME/.pyenv
 
 # Smooch
 export role=web
 
-source /usr/local/bin/virtualenvwrapper.sh
+# source /usr/local/bin/virtualenvwrapper.sh
 
 # tmuxinator
 source ~/.bin/tmuxinator.zsh
@@ -90,7 +111,7 @@ source ~/.bin/tmuxinator.zsh
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# Set personal agliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
@@ -99,6 +120,7 @@ source ~/.bin/tmuxinator.zsh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias vim='nvim'
+alias vimdiff='nvim -d'
 alias fuck='$(thefuck $(fc -ln -1))'
 alias such=git
 alias very=git 
@@ -106,13 +128,31 @@ alias wow='git status'
 alias j='python -m json.tool'
 alias cleanbranches='git branch --merged | grep -v "\*" | grep -v master | grep -v dev | xargs -n 1 git branch -d'
 alias heorku='heroku'
-# 
+
+# Silver searcher default ignore
+alias agall='ag'
+alias ag='agall --path-to-ignore ~/.ignore'
+
 eval "$(fasd --init auto)"
 
-# pyenv
-eval "$(pyenv init -)"
+# Firefox
+alias ffwork="/Applications/Firefox.app/Contents/macOS/firefox --profile /Users/andrew/Library/Application\ Support/Firefox/Profiles/kzoer25m.work &"
+alias ff="/Applications/Firefox.app/Contents/macOS/firefox --profile /Users/andrew/Library/Application\ Support/Firefox/Profiles/1kc81m9o.default &"
 
-code () {
+# Kubectl
+alias podver="kubectl get pods -o=jsonpath='{range .items[*]}{\"\n\"}{.metadata.name}{\":\t\t\t\t\"}{range .spec.containers[*]}{.image}{\", \"}{end}{end}' | sort"
+alias k8s-get-pod-uptime='(echo '\''POD_NAME BOOT_DATE'\''; kubectl get pods -o=jsonpath='\''{range .items[*]}{.metadata.name}{"\t"}{.status.containerStatuses[*].state.running.startedAt}{"\n"}{end}'\'' | sort -k2) | column -t'
+alias k="kubectl"
+alias kcc="kubectl config current-context"
+alias kc="kubectl config use-context"
+alias kgp="kubectl get pods"
+alias kgd="kubectl get deploy"
+alias kdp="kubectl describe pod"
+alias kl="kubectl logs -f"
+alias pi="psc --profile smooch-internal"
+alias pp="psc --profile smooch-prod"
+ 
+code() {
     if [[ $# = 0 ]]
     then
         open -a "Visual Studio Code"
@@ -120,6 +160,16 @@ code () {
         [[ $1 = /* ]] && F="$1" || F="$PWD/${1#./}"
         open -a "Visual Studio Code" --args "$F"
     fi
+}
+
+function connectmongo {
+    export MONGODB_USER="alavers-20180524";
+    export MONGODB_PASSWORD="SECRET pm.acl52.ubald-20180524";
+    export MONGODB_HOST_PREFIX="prod-dump-dbcleanup-20180523";
+    export MONGODB_DATABASE="smooch-prod";
+    export MONGODB_HOST=$MONGODB_HOST_PREFIX"-shard-00-00-c8jvb.mongodb.net:27017,"$MONGODB_HOST_PREFIX"-shard-00-01-c8jvb.mongodb.net:27017,"$MONGODB_HOST_PREFIX"-shard-00-02-c8jvb.mongodb.net:27017/"$MONGODB_DATABASE"?ssl=true&replicaSet="$MONGODB_HOST_PREFIX"-shard-0&authSource=admin";
+    source <(psc decrypt-env --profile smooch-internal --region us-east-1);
+    export MONGODB_URL="mongodb://"$MONGODB_USER":"$MONGODB_PASSWORD"@"$MONGODB_HOST;
 }
 
 function tz {
@@ -133,12 +183,12 @@ function timestamp {
 # Run grep'd tests
 function stg {
     local qw=\'
-    eval mocha 'test/server' --grep $qw$@$qw
+    eval mocha 'test/server/**/*.js' --grep $qw$@$qw
 }
 
 function stgd {
     local qw=\'
-    eval LOG_LEVEL=debug mocha 'test/server' --grep $qw$@$qw
+    eval LOG_LEVEL=debug mocha 'test/server/**/*.js' --grep $qw$@$qw
 }
 
 function swap()         
@@ -149,13 +199,97 @@ function swap()
     mv $TMPFILE "$2"
 }
 
-export NVM_DIR=$HOME/.nvm
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+function keys() {
+    eval `ssh-agent -s`
+    ssh-add -K ~/.ssh/alavers@system42.net
+    ssh-add -K ~/.ssh/andrew+dieu@smooch.io
+    ssh-add -K ~/.ssh/andrew@smooch.io
+}
 
-export HISTTIMEFORMAT="%d/%m/%y %T "
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-export HISTTIMEFORMAT='%F %T '
+# https://gist.github.com/QinMing/364774610afc0e06cc223b467abe83c0
+lazy_load() {
+    # Act as a stub to another shell function/command. When first run, it will load the actual function/command then execute it.
+    # E.g. This made my zsh load 0.8 seconds faster by loading `nvm` when "nvm", "npm" or "node" is used for the first time
+    # $1: space separated list of alias to release after the first load
+    # $2: file to source
+    # $3: name of the command to run after it's loaded
+    # $4+: argv to be passed to $3
+    echo "Lazy loading $1 ..."
+
+    # $1.split(' ') using the s flag. In bash, this can be simply ($1) #http://unix.stackexchange.com/questions/28854/list-elements-with-spaces-in-zsh
+    # Single line won't work: local names=("${(@s: :)${1}}"). Due to http://stackoverflow.com/questions/14917501/local-arrays-in-zsh   (zsh 5.0.8 (x86_64-apple-darwin15.0))
+    local -a names
+    if [[ -n "$ZSH_VERSION" ]]; then
+        names=("${(@s: :)${1}}")
+    else
+        names=($1)
+    fi
+    unalias "${names[@]}"
+    . $2
+    shift 2
+    $*
+}
+
+group_lazy_load() {
+    local script
+    script=$1
+    shift 1
+    for cmd in "$@"; do
+        alias $cmd="lazy_load \"$*\" $script $cmd"
+    done
+}
+
+export NVM_DIR=$HOME/.nvm
+# Lazy load nvm via --no-use
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use
+
+
+# pyenv
+# Lazy load pyenv, but use homebrew python by default
+export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+pyenv() {
+    eval "$(command pyenv init -)"
+    pyenv "$@"
+}
+
+# Lazy load rvm
+export PATH="$PATH:$HOME/.rvm/bin"
+group_lazy_load $HOME/.rvm/scripts/rvm rvm irb rake rails
 
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 
+export HISTTIMEFORMAT="%d/%m/%y %T "
+export HISTTIMEFORMAT='%F %T '
+
+PATH="/Users/andrew/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/andrew/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/andrew/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/andrew/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/andrew/perl5"; export PERL_MM_OPT;
+
+# FZF shell keybindings (CTRL-R and CTRL-T)
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS="--extended"
+export FZF_DEFAULT_COMMAND='ag --hidden -g ""'
+
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    unsetopt xtrace
+    exec 2>&3 3>&-
+fi
+
+# node package dependencies update assist
+source /Users/andrew/git/dep-assist/alias-dep-assist.sh
+
+
+# Speed up zsh by only loading compdump once per day
+# https://gist.github.com/ctechols/ca1035271ad134841284
+autoload -Uz compinit 
+if [[ -n ${HOME}/.zcompdump(#qN.mh+24) ]]; then
+	compinit;
+else
+	compinit -C;
+fi;
+
+#zshrc profiling
+#zprof
